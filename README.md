@@ -1,0 +1,33 @@
+# Stopwatch
+Simple tool for count time between two points in time used standard library chrono to get ms value of 2 reference points.
+
+## Instalation
+Throw it in your code folder and include on top of your code:
+```cpp
+#include"stopwatch.h"
+```
+## Usage
+stopwatch header has class Stopwatch in Time namespace which you need to declare first to use it
+```cpp
+Time::Stopwatch myStopwatch;
+```
+After you can use .start() and .stop() methods to create an reference points in time of execution code.
+And after stop the stopwatch execute .getRuntime() method to get double value of delta time of reference points. If you not stop the stopwatch it returns -1 for your time execution.
+Returns 0 if not started.
+
+## Example
+```cpp
+void fun()
+{
+  Time::Stopwatch myStopwatch;
+
+  myStopwatch.start();
+  //code to execute
+
+  //...
+
+  myStopwatch.stop();
+
+  std::cout<<"Function executed in "<<myStopwatch.getRuntime()<<" ms.\n";
+}
+```
