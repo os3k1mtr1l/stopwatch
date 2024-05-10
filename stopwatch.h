@@ -14,7 +14,7 @@ namespace Time
             bool running;
         
         public:
-            Stopwatch() : running(false) {}
+            Stopwatch() : running(false), begin(reference_point::min()), end(reference_point::min()) {}
 
             void start()
             {
@@ -30,9 +30,13 @@ namespace Time
 
             double getRuntime()
             {
-                if(running) return -1.0;
+                if(running || begin == reference_point::min()) return -1.0;
 
                 duration elapsed_seconds = end - begin;
+
+                end = reference_point::min();
+                begin = reference_point::min();
+                
                 return elapsed_seconds.count();
             }
     };
