@@ -1,5 +1,5 @@
-#ifndef STOPWATCH_H
-#define STOPWATCH_H
+#ifndef STOPWATCH_HPP
+#define STOPWATCH_HPP
 #include<chrono>
 
 namespace Time
