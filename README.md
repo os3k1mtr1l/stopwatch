@@ -4,7 +4,7 @@ Simple tool for count time between two points in time used standard library chro
 ## Instalation
 Throw it in your code folder and include on top of your code:
 ```cpp
-#include"stopwatch.h"
+#include"stopwatch.hpp"
 ```
 ## Usage
 stopwatch header has class Stopwatch in Time namespace which you need to declare first to use it
