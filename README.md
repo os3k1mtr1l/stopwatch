@@ -1,5 +1,5 @@
 # Stopwatch
-Simple tool for count time between two points in time used standard library chrono to get ms value of 2 reference points.
+Simple tool for count time between two points in time used standard library chrono to get value in seconds of 2 reference points.
 
 ## Instalation
 Throw it in your code folder and include on top of your code:
@@ -29,6 +29,6 @@ void fun()
 
   myStopwatch.stop();
 
-  std::cout<<"Function executed in "<<myStopwatch.getRuntime()<<" ms.\n";
+  std::cout<<"Function executed in "<<myStopwatch.getRuntime()<<" s.\n";
 }
 ```
