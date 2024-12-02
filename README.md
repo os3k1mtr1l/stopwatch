@@ -1,34 +1,66 @@
 # Stopwatch
-Simple tool for count time between two points in time used standard library chrono to get value in seconds of 2 reference points.
 
-## Instalation
-Throw it in your code folder and include on top of your code:
-```cpp
-#include"stopwatch.hpp"
-```
+A high-precision, flexible stopwatch utility for measuring time intervals in C++ using `std::chrono`. This implementation supports starting, stopping, pausing, resuming, and resetting the timer, making it ideal for benchmarking and profiling tasks in various applications.
+
+---
+
+## Features
+
+- High-Precision Timing: Built on `std::chrono` for accurate time measurements.
+- Full Control: Start, stop, pause, resume, and reset the stopwatch.
+- Customizable Clock: Supports clocks from `<chrono>` library, such as `system_clock`, `steady_clock`, or any compatible clock type. By default using `steady_clock`.
+- Simple Interface: Easy to integrate and use in your C++ projects.
+- Pause Handling: Includes support for accurate timing even during pauses.
+
+---
+
 ## Usage
-stopwatch header has class Stopwatch in Time namespace which you need to declare first to use it
+
+### Requirements
+- C++17 or later
+- Compatible compilers (e.g., g++, MSVC)
+
+### Including the Stopwatch in Your Project
+
+Clone/download it, paste to your codebase include folder and include to your code:
+
 ```cpp
-Time::Stopwatch myStopwatch;
+#include "stopwatch.hpp"
 ```
-After you can use .start() and .stop() methods to create an reference points in time of execution code.
-And after stop the stopwatch execute .getRuntime() method to get double value of delta time of reference points. If you not stop or started the stopwatch it returns -1 for your time execution.
 
-It clears off begin and end to zero after giving you delta of time. So it can be reused multiple times.
+## Basic Example
 
-## Example
 ```cpp
-void fun()
-{
-  Time::Stopwatch myStopwatch;
+#include "stopwatch.hpp"
+#include <iostream>
+#include <thread>
 
-  myStopwatch.start();
-  //code to execute
+int main() {
+    using namespace std::chrono_literals;
 
-  //...
+    Time::Stopwatch<> stopwatch; // Default to steady_clock
 
-  myStopwatch.stop();
+    stopwatch.start();
 
-  std::cout<<"Function executed in "<<myStopwatch.getRuntime()<<" s.\n";
+    std::this_thread::sleep_for(2s);
+
+    stopwatch.pause();
+
+    std::this_thread::sleep_for(5s);
+
+    stopwatch.resume();
+
+    std::this_thread::sleep_for(1s);
+
+    stopwatch.stop();
+
+    std::cout << "Elapsed time: " << stopwatch.getTime() << " seconds" << std::endl;
+
+    return 0;
 }
 ```
+
+---
+
+### License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
