@@ -1,44 +1,92 @@
-#ifndef STOPWATCH_HPP
-#define STOPWATCH_HPP
+#pragma once
 #include<chrono>
 
 namespace Time
 {
-    typedef std::chrono::steady_clock::time_point reference_point;
-    typedef std::chrono::duration<double> duration;
-
+    template<typename ClockType = std::chrono::steady_clock>
     class Stopwatch
     {
-        private:
-            reference_point begin, end;
-            bool running;
-        
+        using time_point = typename ClockType::time_point;
+
         public:
-            Stopwatch() : running(false), begin(reference_point::min()), end(reference_point::min()) {}
+            Stopwatch();
 
-            void start()
-            {
-                begin = std::chrono::steady_clock::now();
-                running = true;
-            }
+            void start();
+            void stop();
+            void pause();
+            void resume();
+            void reset();
 
-            void stop()
-            {
-                end = std::chrono::steady_clock::now();
-                running = false;
-            }
+            double getTime() const;
+        
+        private:
+            time_point m_begin;
+            time_point m_end;
+            double m_pause_mod;
 
-            double getRuntime()
-            {
-                if(running || begin == reference_point::min()) return -1.0;
-
-                duration elapsed_seconds = end - begin;
-
-                end = reference_point::min();
-                begin = reference_point::min();
-                
-                return elapsed_seconds.count();
-            }
+            bool m_running, m_paused;
     };
+
+    template<typename ClockType>
+    Stopwatch<ClockType>::Stopwatch() : m_begin(time_point::min()),
+                                        m_end(time_point::min()),
+                                        m_pause_mod(0.0f),
+                                        m_running(false), m_paused(false) {}
+
+    template<typename ClockType>
+    void Stopwatch<ClockType>::start()
+    {
+        m_begin = ClockType::now();
+        m_running = true;
+    }
+
+    template<typename ClockType>
+    void Stopwatch<ClockType>::stop()
+    {
+        resume();
+
+        m_end = ClockType::now();
+
+        m_running = false;
+    }
+
+    template<typename ClockType>
+    void Stopwatch<ClockType>::pause()
+    {
+        if(m_running && !m_paused)
+        {
+            m_end = ClockType::now();
+            m_paused = true;
+        }
+    }
+
+    template<typename ClockType>
+    void Stopwatch<ClockType>::resume()
+    {
+        if(m_running && m_paused)
+        {
+            std::chrono::duration<double> pause_elapsed = ClockType::now() - m_end;
+            m_pause_mod += pause_elapsed.count();
+
+            m_paused = false;
+        }
+    }
+
+    template<typename ClockType>
+    void Stopwatch<ClockType>::reset()
+    {
+        m_begin = time_point::min();
+        m_end = time_point::min();
+        m_pause_mod = 0.0f;
+        m_running = false;
+        m_paused = false;
+    }
+
+    template<typename ClockType>
+    double Stopwatch<ClockType>::getTime() const
+    {
+        std::chrono::duration<double> elapsed = (m_running && !m_paused? ClockType::now() : m_end) - m_begin;
+
+        return elapsed.count() - m_pause_mod;
+    }
 }
-#endif
